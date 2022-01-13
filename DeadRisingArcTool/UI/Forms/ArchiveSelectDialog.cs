@@ -395,33 +395,52 @@ namespace DeadRisingArcTool.Forms
             this.treeView1.Sort();
         }
 
-        private static string[] FindArchivesInFolder(string folderPath, bool recursive, bool includeNonArcFiles)
+        private static string[] FindArchivesInFolder(string folderPath, bool recursive, bool includeNonArcFiles, int searchLevel = 0)
         {
+            // Don't try to search deeper
+            if (searchLevel > 1)
+                return new string[0];
+
             List<string> filesFound = new List<string>();
 
             // Get the directory info for the specified folder.
             DirectoryInfo rootInfo = new DirectoryInfo(folderPath);
 
-            // Loop through all child files in the folder.
-            foreach (FileInfo fileInfo in rootInfo.GetFiles())
+            try
             {
-                // If we are including non-arc files add the child file, otherwise check the file extension.
-                if (includeNonArcFiles == true || fileInfo.Extension.Equals(".arc", StringComparison.OrdinalIgnoreCase) == true)
+                // Loop through all child files in the folder.
+                foreach (FileInfo fileInfo in rootInfo.GetFiles())
                 {
-                    // Add the file to the list.
-                    filesFound.Add(fileInfo.FullName);
+                    // If we are including non-arc files add the child file, otherwise check the file extension.
+                    if (includeNonArcFiles == true || fileInfo.Extension.Equals(".arc", StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        // Add the file to the list.
+                        filesFound.Add(fileInfo.FullName);
+                    }
                 }
             }
-
-            // Check if we should search recursively.
-            if (recursive == true)
+            catch (Exception e)
             {
-                // Loop through all child directories.
-                foreach (DirectoryInfo dirInfo in rootInfo.GetDirectories())
+                Console.WriteLine(e);
+               // throw;
+            }
+
+            try
+            {
+                // Check if we should search recursively.
+                if (recursive == true)
                 {
-                    // Add any files found to the list.
-                    filesFound.AddRange(FindArchivesInFolder(dirInfo.FullName, recursive, includeNonArcFiles));
+                    // Loop through all child directories.
+                    foreach (DirectoryInfo dirInfo in rootInfo.GetDirectories())
+                    {
+                        // Add any files found to the list.
+                        filesFound.AddRange(FindArchivesInFolder(dirInfo.FullName, recursive, includeNonArcFiles, searchLevel++));
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
             // Return the list of files found.

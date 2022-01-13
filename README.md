@@ -21,7 +21,7 @@ This tool is primarily designed for the PC version of the game, but some feature
 - Toggling bounding boxes/spheres in the model view using a controller is finicky
 
 # How to use
-DeadRisingArcTool (hereby short handed to just ArcTool) works by opening all of the game's arc files and displaying all of the files collectively. After running ArcTool you can select File->Open to select the game's archive folder. For PC this is the nativeWin64 folder, for Xbox 360 this is just the game's root folder.
+DeadRisingArcTool (hereby short handed to just ArcTool) works by opening all of the game's arc files and displaying all of the files collectively. After running ArcTool you can select File->Open to select the game's archive folder. For PC this is the nativeWin64 folder but you can select the root folder, for Xbox 360 this is just the game's root folder.
 
 ![](/Images/open_folder.png)
 
